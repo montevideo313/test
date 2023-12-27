@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Viewer</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+    <style>
+        model-viewer {
+            width: 100%;
+            height: 100vh;
+            margin: 0 auto;
+            position: relative;
+        }
+
+    .Hotspot {
+        /*--min-hotspot-opacity: 0;*/
+        width: 20px;
+        height: 20px;
+        background-color: white; /* Change the color to white */
+        border: 0px solid #FFFFFF; /* Add a black border for better visibility */
+        border-radius: 50%;
+        position: absolute;
+        pointer-events: auto;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add drop shadow to the text box */
+    }
+
+    .HotspotAnnotation {
+        display: none;
+        position: absolute;
+        background-color: white;
+        padding: 20px; /* Increase the padding for a larger text box */
+        border-radius: 8px; /* Round the corners */
+        font-size: 14px; /* Increase the font size */
+        font-weight: bold; /* Make the text bold */
+        width: 200px; /* Increase the width of the text box */
+        left: 40px; /* Adjust the distance from the dot */
+        top: -25px; /* Adjust the distance from the dot */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add drop shadow to the text box */
+    }
+
+        #swapButton {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <model-viewer id="modelViewer" src="https://dl.dropbox.com/scl/fi/4chbpqaa8mqnsceqc3xtm/skeleton.glb?rlkey=r2oei7b2jffe9bvzieozrpb2k&dl=0" ar ar-modes="webxr scene-viewer quick-look" camera-controls poster="poster.webp" shadow-intensity="1" camera-orbit="1.765deg 88.68deg 14.28m" field-of-view="30deg" auto-rotate>
+        <button class="Hotspot" slot="hotspot-2" data-position="1.1984828243535457m 0.3438794305470423m -0.02022463541971553m" data-normal="0.795753688732263m 0.3031359285265265m 0.5242944551541218m" data-visibility-attribute="visible">
+        <span>1</span>
+        <div class="HotspotAnnotation">Ulna</div>
+    </button><button class="Hotspot" slot="hotspot-3" data-position="1.0996333755487715m 0.5885896270552922m -0.19784082487355592m" data-normal="0.9023937113264463m 0.30859878312894645m 0.30075302294376977m" data-visibility-attribute="visible">
+        <div class="HotspotAnnotation">Radius</div>
+    </button><button class="Hotspot" slot="hotspot-4" data-position="0.7731359562592166m 1.673683166339623m -0.25634394004717853m" data-normal="0.901296521054444m 0.1909216283877307m 0.3888618172936669m" data-visibility-attribute="visible">
+        <div class="HotspotAnnotation">Humerus</div>
+    </button><button class="Hotspot" slot="hotspot-5" data-position="0.42291400239081184m -0.7463734624666742m 0.048219153587165664m" data-normal="-0.10548026293168616m 0.07497906802622513m 0.991590668315198m" data-visibility-attribute="visible">
+        <div class="HotspotAnnotation">Femur</div>
+    </button><button class="Hotspot" slot="hotspot-6" data-position="0.24151985504420018m -2.078752940443988m -0.040737470240788554m" data-normal="-0.6615674844942084m -0.013825030398936443m 0.7497581823457974m" data-visibility-attribute="visible">
+        <div class="HotspotAnnotation">Tibia</div>
+    </button><button class="Hotspot" slot="hotspot-7" data-position="0.3431144966776085m -2.4526224078412113m -0.14586124202037887m" data-normal="0.250979926979895m 0.0072849069397529324m 0.9679648786934605m" data-visibility-attribute="visible">
+        <div class="HotspotAnnotation">Fibula</div>
+    </button><button class="Hotspot" slot="hotspot-8" data-position="0.38070087255130636m 2.020550905618543m -0.40663040177086884m" data-normal="0.37706074007176127m 0.08617605536412218m -0.9221707465423177m" data-visibility-attribute="visible">
+        <div class="HotspotAnnotation">Scapula</div>
+    </button>
+    </model-viewer>
+
+    <button id="swapButton">Swap Model</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const hotspots = document.querySelectorAll('.Hotspot');
+            const annotations = document.querySelectorAll('.HotspotAnnotation');
+            const modelViewer = document.getElementById('modelViewer');
+            const swapButton = document.getElementById('swapButton');
+
+            hotspots.forEach((hotspot, index) => {
+                hotspot.addEventListener('click', function (event) {
+                    event.stopPropagation();
+
+                    const annotation = this.querySelector('.HotspotAnnotation');
+                    annotation.style.display = (annotation.style.display === 'none' || !annotation.style.display) ? 'block' : 'none';
+
+                    annotations.forEach(otherAnnotation => {
+                        if (otherAnnotation !== annotation) {
+                            otherAnnotation.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            document.addEventListener('click', function () {
+                annotations.forEach(annotation => {
+                    annotation.style.display = 'none';
+                });
+            });
+
+            // Swap models on button click
+            swapButton.addEventListener('click', function () {
+                const currentModel = modelViewer.getAttribute('src');
+                const newModel = (currentModel.includes('skeleton')) ?
+                    'https://dl.dropbox.com/scl/fi/kpfqv38u76efhmjjqoq9h/muscles.glb?rlkey=x78zqce7bqsrmvq64dag1pzmd&dl=0' :
+                    'https://dl.dropbox.com/scl/fi/4chbpqaa8mqnsceqc3xtm/skeleton.glb?rlkey=r2oei7b2jffe9bvzieozrpb2k&dl=0';
+
+                modelViewer.setAttribute('src', newModel);
+            });
+        });
+    </script>
+</body>
+</html>
