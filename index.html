@@ -7,13 +7,21 @@
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
     <style>
         model-viewer {
-            width: 100%; /* Adjust width as needed */
-            height: 600px; /* Adjust height as needed */
+            width: 100%;
+            height: 600px;
             margin: 0 auto;
+            position: relative;
+        }
+
+        model-viewer > div {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
 <body>
-    <model-viewer src="https://raw.githubusercontent.com/montevideo313/test/main/teapot-blue.glb" camera-controls auto-rotate></model-viewer>
+    <model-viewer src="https://raw.githubusercontent.com/montevideo313/test/4c9e039a2fd7619d891040f0a1e621a887cf5ac4/teapot.glb" camera-controls></model-viewer>
 </body>
 </html>
